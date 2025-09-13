@@ -9,7 +9,7 @@ import {
 } from 'firebase/auth';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
-import { User } from '../types';
+import type { User } from '../types';
 
 interface AuthContextType {
   currentUser: User | null;

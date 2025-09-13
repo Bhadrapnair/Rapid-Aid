@@ -2,20 +2,18 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { 
   collection, 
   addDoc, 
-  getDocs, 
   doc, 
   getDoc, 
   updateDoc, 
   deleteDoc, 
   query, 
   orderBy, 
-  where,
   onSnapshot,
   Timestamp
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../lib/firebase';
-import { FundRequest, User } from '../types';
+import type { FundRequest } from '../types';
 import { useAuth } from './AuthContext';
 
 interface FundRequestContextType {
