@@ -8,11 +8,13 @@ const CreateRequest: React.FC = () => {
     title: '',
     description: '',
     targetAmount: '',
-    category: 'medical',
-    urgency: 'medium',
+    category: 'medical' as const,
+    urgency: 'medium' as const,
     deadline: ''
   });
+  const [files, setFiles] = useState<FileList | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -21,18 +23,38 @@ const CreateRequest: React.FC = () => {
     });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFiles(e.target.files);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     
-    // TODO: Implement fund request creation
-    console.log('Creating fund request:', formData);
-    
-    // Simulate API call
-    setTimeout(() => {
+    if (!formData.title || !formData.description || !formData.targetAmount) {
+      setError('Please fill in all required fields');
+      return;
+    }
+
+    const targetAmount = parseFloat(formData.targetAmount);
+    if (targetAmount <= 0) {
+      setError('Target amount must be greater than 0');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError('');
+      
+      // Simulate creating the fund request
+      setTimeout(() => {
+        navigate('/dashboard');
+        setLoading(false);
+      }, 1000);
+    } catch (error) {
+      console.error('Error creating request:', error);
+      setError('Failed to create fund request. Please try again.');
       setLoading(false);
-      navigate('/dashboard');
-    }, 2000);
+    }
   };
 
   return (
@@ -52,6 +74,12 @@ const CreateRequest: React.FC = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md">
+            {error}
+          </div>
+        )}
+
         <div className="card">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Request Details</h2>
           
@@ -91,7 +119,7 @@ const CreateRequest: React.FC = () => {
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="targetAmount" className="block text-sm font-medium text-gray-700">
-                  Target Amount ($) *
+                  Target Amount () *
                 </label>
                 <input
                   type="number"
@@ -177,6 +205,7 @@ const CreateRequest: React.FC = () => {
               accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
               className="hidden"
               id="file-upload"
+              onChange={handleFileChange}
             />
             <label
               htmlFor="file-upload"
@@ -184,6 +213,16 @@ const CreateRequest: React.FC = () => {
             >
               Choose Files
             </label>
+            {files && files.length > 0 && (
+              <div className="mt-4">
+                <p className="text-sm text-gray-600 mb-2">Selected files:</p>
+                <ul className="text-sm text-gray-500">
+                  {Array.from(files).map((file, index) => (
+                    <li key={index}>• {file.name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
 

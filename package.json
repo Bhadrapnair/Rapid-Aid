@@ -6,8 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:prod": "tsc -b && vite build --mode production",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "lint:fix": "eslint . --fix",
+    "preview": "vite preview",
+    "deploy": "npm run build:prod && firebase deploy",
+    "deploy:vercel": "npm run build:prod && vercel --prod"
   },
   "dependencies": {
     "@types/react-router-dom": "^5.3.3",

@@ -2,8 +2,8 @@ import React from 'react';
 import { User, Mail, Shield, Calendar } from 'lucide-react';
 
 const Profile: React.FC = () => {
-  const currentUser = { 
-    displayName: 'Test User', 
+  const currentUser = {
+    displayName: 'Test User',
     email: 'test@example.com',
     isVerified: false,
     createdAt: new Date()
